@@ -1,4 +1,5 @@
 import { UserRepository } from "../Repositories/UserRepository.js";
+import validator from 'validator'
 import bcrypt from 'bcryptjs'
 
 export class UserService {
@@ -8,6 +9,7 @@ export class UserService {
     }
 
     async create({name, email, password, role}) {
+        const emailIsValid = this.validateEmail(email)
         const userExist = await this.userRepository.findByEmail(email)
         if(userExist) {
             throw new Error(`Já existe um usuário com o email ${email}`)
@@ -16,7 +18,7 @@ export class UserService {
         const hashPassword = await bcrypt.hash(password, 10)
         const user = await this.userRepository.create({
             name,
-            email,
+            email: emailIsValid,
             password: hashPassword,
             role,
          })
@@ -61,11 +63,22 @@ export class UserService {
         if(data.password) {
             data.password = await  bcrypt.hash(data.password, 10)
         }
+        if(data.email) {
+            const emailIsValid = await this.validateEmail(data.email)
+            data.email = await emailIsValid
+        }
 
         const updatedUser = await this.userRepository.update(id, data)
         const{password:_, ...userNoPassword} = updatedUser
         return userNoPassword
 
+    }
+    validateEmail(email) {
+        if (!email || !validator.isEmail(email)) {
+            throw new Error('Email inválido')
+            }
+  
+         return validator.normalizeEmail(email) 
     }
     
 
