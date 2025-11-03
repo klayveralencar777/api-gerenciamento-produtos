@@ -1,4 +1,38 @@
+import React from 'react'
+import { useState } from "react"
+import { data, useNavigate } from 'react-router-dom'
+import { createUser } from '../services/UserRegister'
+
 export default function FormRegister() {
+    const navigate = useNavigate()
+
+    const [dataForm, setDataForm] = useState({
+        name: "",
+        email: "",
+        password: "",
+        role: ""
+    })
+
+    function handleChange(e) {
+        const { name, value } = e.target
+        setDataForm((prev) => ({ ...prev, [name]: value }))
+    }
+
+    async function handleSubmit(e) {
+        e.preventDefault()
+        try {
+            await createUser(dataForm)
+            alert("Usuário cadastrado com sucesso!")
+            navigate("/login")
+
+        } catch (error) {
+            alert("Falha ao cadastrar usuário")
+            console.error(error)
+        }
+
+    }
+
+
     return (
 
         <div className="flex min-h-full flex-col justify-center px-6 py-30 lg:px-8">
@@ -9,8 +43,11 @@ export default function FormRegister() {
                 }}
                 className="mt-10 sm:mx-auto sm:w-full sm:max-w-lg"
             >
-                <form action="#" method="POST" className="space-y-6">
-                    {/* Nome */}
+
+                <p style={{ marginBottom: '30px' }} 
+                className="mt-8 text-lg font-semibold text-pretty text-center text-gray-500 sm:text-xl/8">Cadastro</p>
+
+                <form onSubmit={handleSubmit} action="#" method="POST" className="space-y-6">
                     <div>
                         <label htmlFor="name" className="block text-sm font-medium text-black">
                             Nome
@@ -20,6 +57,8 @@ export default function FormRegister() {
                                 id="name"
                                 name="name"
                                 type="text"
+                                value={dataForm.name}
+                                onChange={handleChange}
                                 required
                                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 
                                 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 
@@ -38,6 +77,8 @@ export default function FormRegister() {
                                 id="email"
                                 name="email"
                                 type="email"
+                                value={dataForm.email}
+                                onChange={handleChange}
                                 autoComplete="email"
                                 required
                                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 
@@ -48,7 +89,7 @@ export default function FormRegister() {
                         </div>
                     </div>
 
-                   
+
                     <div>
                         <label htmlFor="password" className="block text-sm font-medium text-black">
                             Senha
@@ -58,6 +99,8 @@ export default function FormRegister() {
                                 id="password"
                                 name="password"
                                 type="password"
+                                value={dataForm.password}
+                                onChange={handleChange}
                                 autoComplete="new-password"
                                 required
                                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 
@@ -68,7 +111,7 @@ export default function FormRegister() {
                         </div>
                     </div>
 
-                    
+
                     <div>
                         <label htmlFor="role" className="block text-sm font-medium text-black">
                             Tipo de usuário
@@ -78,18 +121,20 @@ export default function FormRegister() {
                                 id="role"
                                 name="role"
                                 required
+                                value={dataForm.role}
+                                onChange={handleChange}
                                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 
                                 -outline-offset-1 outline-gray-300 focus:outline-2 
                                 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm"
                             >
                                 <option value="">Selecione...</option>
-                                <option value="admin">Administrador</option>
-                                <option value="client">Cliente</option>
+                                <option value="ADMIN">Administrador</option>
+                                <option value="CLIENT">Cliente</option>
                             </select>
                         </div>
                     </div>
 
-                    
+
                     <div>
                         <button
                             type="submit"

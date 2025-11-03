@@ -6,6 +6,8 @@ export default function FormLogin() {
                 padding: '30px',
                 borderRadius: '12px',
             }} class="mt-10 sm:mx-auto sm:w-full sm:max-w-lg">
+
+                <p className="mt-8 text-lg font-semibold text-pretty text-gray-500 text-center sm:text-xl/8">Login</p>
                 <form action="#" method="POST" class="space-y-6">
 
                     <div className="flex items-center justify-center text-white px-4 py-2">

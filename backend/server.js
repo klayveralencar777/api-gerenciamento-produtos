@@ -3,11 +3,12 @@ import express from 'express'
 import AuthRouter from './src/Routes/AuthRoutes.js'
 import UserRouter from './src/Routes/UserRoutes.js'
 import ProductRouter from './src/Routes/ProductRoutes.js'
+import cors from 'cors'
 dotenv.config()
 
 const app = express()
 const port = 3000
-
+app.use(cors())
 app.use(express.json())
 app.use('/auth', AuthRouter)
 app.use('/users', UserRouter)
